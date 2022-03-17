@@ -1,18 +1,29 @@
 (function () {
+  // localstotage
+  function setStorage(name, value) {
+    localStorage.setItem(name, JSON.stringify(value));
+  }
+  function getStorage(name) {
+    const gettingStorage = localStorage.getItem(name);
+    if (gettingStorage) {
+      return JSON.parse(gettingStorage);
+    } else {
+      return [];
+    }
+  }
   // create function storage
-  function storageModule(name, callback = null) {
+  function storageModule(data) {
     // target
-    const target = [];
+    let target = {};
+    data.forEach((item) => {
+      target[item.name] = getStorage(item.name);
+    });
 
     // handeler
     const handeler = {
-      get: function (target, property) {
-        // property is index in this case
-        return target[property];
-      },
-      set: function (target, property, value, receiver) {
+      set(target, property, value) {
         target[property] = value;
-        // you have to return true to accept the changes
+        setStorage(property, value);
         return true;
       },
     };
