@@ -1,4 +1,5 @@
 (function () {
+  let callbacks = {};
   // localstotage
   function setStorage(name, value) {
     localStorage.setItem(name, JSON.stringify(value));
@@ -17,6 +18,9 @@
     let target = {};
     data.forEach((item) => {
       target[item.name] = getStorage(item.name);
+      if (item.callback) {
+        callbacks[item.name] = item.callback;
+      }
     });
 
     // handeler
@@ -24,6 +28,9 @@
       set(target, property, value) {
         target[property] = value;
         setStorage(property, value);
+        if (callbacks[property]) {
+          callbacks[property](value);
+        }
         return true;
       },
     };
