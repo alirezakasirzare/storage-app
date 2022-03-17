@@ -7,6 +7,7 @@
   function getStorage(name) {
     const gettingStorage = localStorage.getItem(name);
     if (gettingStorage) {
+      callbacks[name](JSON.parse(gettingStorage));
       return JSON.parse(gettingStorage);
     } else {
       return [];
@@ -17,10 +18,10 @@
     // target
     let target = {};
     data.forEach((item) => {
-      target[item.name] = getStorage(item.name);
       if (item.callback) {
         callbacks[item.name] = item.callback;
       }
+      target[item.name] = getStorage(item.name);
     });
 
     // handeler
